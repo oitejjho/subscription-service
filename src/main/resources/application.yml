@@ -1,0 +1,20 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: basic
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/subscription?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+    hikari:
+      connection-timeout: 10000
+      idle-timeout: 10000
+      minimum-idle: 1
+      maximum-pool-size: 10
+
+subscription-service:
+  api-key: "cb4532fc26b9421d88c5a079288bf51e"
+  correlation-id-key: "X-Correlation-ID"
