@@ -9,11 +9,21 @@ spring:
     url: jdbc:mysql://localhost:3307/subscription?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
     username: root
     password: root
+    initialization-mode: always
     hikari:
       connection-timeout: 10000
       idle-timeout: 10000
       minimum-idle: 1
       maximum-pool-size: 10
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.H2Dialect
+#        format_sql: true
+#        id:
+#          new_generator_mappings: false
 
 subscription-service:
   api-key: "cb4532fc26b9421d88c5a079288bf51e"
