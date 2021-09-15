@@ -34,6 +34,8 @@ public class SubscribedUserEntity {
 
     private String newsletterId;
 
+    private Boolean activeFlag;
+
     private LocalDateTime created;
 
 }

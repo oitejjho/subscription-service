@@ -3,10 +3,16 @@ package com.demo.subscriptionservice.repository;
 import com.demo.subscriptionservice.model.entity.SubscribedUserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface SubscribeUserRepository extends JpaRepository<SubscribedUserEntity, Long> {
+import java.util.Optional;
+
+public interface SubscribeUserRepository extends PagingAndSortingRepository<SubscribedUserEntity, Long> {
 
     Page<SubscribedUserEntity> findAllByOrderByCreatedDesc(Pageable pageable);
+
+    Optional<SubscribedUserEntity> findBySubscriptionId(String subscriptionId);
+
+    Optional<SubscribedUserEntity> findByEmail(String email);
 
 }

@@ -3,12 +3,19 @@ package com.demo.subscriptionservice.service.persistence;
 import com.demo.subscriptionservice.constants.StatusConstants;
 import com.demo.subscriptionservice.exceptions.InvalidRequestException;
 import com.demo.subscriptionservice.model.entity.SubscribedUserEntity;
+import com.demo.subscriptionservice.model.response.SubscriptionResponse;
 import com.demo.subscriptionservice.repository.SubscribeUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static com.demo.subscriptionservice.constants.StatusConstants.HttpConstants.DUPLICATE_EMAIL_ERROR;
 
@@ -21,45 +28,26 @@ public class SubscriptionPersistenceService {
     private final SubscribeUserRepository subscribeUserRepository;
 
     public SubscribedUserEntity createSubscription(SubscribedUserEntity entity) {
-        try {
-            SubscribedUserEntity persistedEntity = this.subscribeUserRepository.save(entity);
-            return persistedEntity;
-        } catch (DataIntegrityViolationException ex) {
-            LOG.error(ex.getMessage());
+        Optional<SubscribedUserEntity> existingEntity = this.subscribeUserRepository.findByEmail(entity.getEmail());
+        if(existingEntity.isPresent())
             throw new InvalidRequestException(DUPLICATE_EMAIL_ERROR);
-        }
+        SubscribedUserEntity persistedEntity = this.subscribeUserRepository.save(entity);
+        return persistedEntity;
     }
 
-    /*public Mono<UserCommand> save(UserCommand userCommand) {
-        UserEntity userEntity = conversionService.convert(userCommand, UserEntity.class);
-        return userRepository.save(userEntity)
-                .map(item -> {
-                    userCommand.setId(item.getId());
-                    return userCommand;
-                });
+    public Page<SubscribedUserEntity> getSubscriptions(Pageable pageable) {
+       return this.subscribeUserRepository.findAllByOrderByCreatedDesc(pageable);
     }
 
-    public Mono<UserCommand> findById(long id) {
-        return userRepository.findById(id)
-                .map(item -> conversionService.convert(item, UserCommand.class));
+    public SubscribedUserEntity getSubscription(String subscriptionId) {
+        Optional<SubscribedUserEntity> subscribedUserEntityOptional = this.subscribeUserRepository.findBySubscriptionId(subscriptionId);
+        if(subscribedUserEntityOptional.isEmpty())
+            throw new NoSuchElementException();
+        return subscribedUserEntityOptional.get();
     }
 
-    public Mono<CustomPage<UserCommand>> findAll(Pageable pageable) {
-        Mono<Long> countMono = userRepository.count();
-        int skip = pageable.getPageNumber() == 1 ? 0 : pageable.getPageNumber() * pageable.getPageSize();
-        Mono<List<UserCommand>> userCommandFlux = userRepository.findAll(skip, pageable.getPageSize())
-                .map(item -> conversionService.convert(item, UserCommand.class))
-                .collectList();
-
-        return Mono.zip(countMono, userCommandFlux, (aLong, list) -> new CustomPage<UserCommand>()
-                .setContent(list)
-                .setNumber(pageable.getPageNumber())
-                .setSize(list.size())
-                .setTotalElements(aLong));
+    public void updateSubscription(SubscribedUserEntity entity) {
+        this.subscribeUserRepository.save(entity);
     }
-
-    public void delete(long id) {
-        userRepository.deleteById(id);
-    }*/
 
 }

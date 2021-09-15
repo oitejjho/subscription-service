@@ -15,7 +15,9 @@ public class StatusConstants {
         DATE_OF_BIRTH_IS_REQUIRED("TEMP31302", "date_of_birth is required"),
         DATE_OF_BIRTH_IS_INVALID("TEMP31303", "date_of_birth is invalid"),
         CONSENT_FLAG_IS_REQUIRED("TEMP31304", "consent_flag is required"),
-        NEWSLETTER_ID_IS_REQUIRED("TEMP31304", "newsletter_id is required"),
+        NEWSLETTER_ID_IS_REQUIRED("TEMP31305", "newsletter_id is required"),
+        ACTION_IS_REQUIRED("TEMP31306", "action is required"),
+        ACTION_IS_INVALID("TEMP31307", "action is invalid"),
 
         DUPLICATE_EMAIL_ERROR("TEMP31993", "email is duplicate"),
         METHOD_NOT_ALLOWED("TEMP31994", "Method not allowed"),

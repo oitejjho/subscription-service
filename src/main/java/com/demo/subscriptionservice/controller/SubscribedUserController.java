@@ -1,18 +1,23 @@
 package com.demo.subscriptionservice.controller;
 
 
+import com.demo.subscriptionservice.annotations.IsEnum;
+import com.demo.subscriptionservice.annotations.Required;
 import com.demo.subscriptionservice.component.SubscriptionComponent;
 import com.demo.subscriptionservice.constants.StatusConstants;
+import com.demo.subscriptionservice.enums.SubscriptionAction;
 import com.demo.subscriptionservice.model.Response;
 import com.demo.subscriptionservice.model.Status;
 import com.demo.subscriptionservice.model.request.CreateSubscriptionRequest;
+import com.demo.subscriptionservice.model.response.SubscriptionCreateResponse;
+import com.demo.subscriptionservice.model.response.SubscriptionListResponse;
 import com.demo.subscriptionservice.model.response.SubscriptionResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Validated
@@ -25,44 +30,38 @@ public class SubscribedUserController {
 
     private final SubscriptionComponent subscriptionComponent;
 
-    @PostMapping(path = "/subscriptions")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Response<SubscriptionResponse> createSubscription(@Valid @RequestBody CreateSubscriptionRequest request, HttpServletResponse httpServletResponse) {
-        SubscriptionResponse response = subscriptionComponent.createSubscription(request);
+
+    @GetMapping(path = "/subscriptions")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<SubscriptionListResponse> getSubscriptions(Pageable pageable) {
+        SubscriptionListResponse response = subscriptionComponent.getSubscriptions(pageable);
         return new Response<>(new Status(StatusConstants.HttpConstants.SUCCESS), response);
     }
 
-    /*@PatchMapping(path = "/v1/users/{id}")
-    public Mono<Response<UserResponse>> updateUser(@PathVariable Long id,
-                                                   @Valid @RequestBody UpdateUserRequest request) {
-        Mono<UserResponse> userResponseMono = userComponent.updateUser(id, request);
-        return success(userResponseMono);
+    @GetMapping(path = "/subscriptions/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<SubscriptionResponse> getSubscription(@PathVariable String id) {
+        SubscriptionResponse response = subscriptionComponent.getSubscription(id);
+        return new Response<>(new Status(StatusConstants.HttpConstants.SUCCESS), response);
     }
 
-    @GetMapping(path = "/v1/users/{id}")
-    public Mono<Response<UserResponse>> getUser(@PathVariable Long id) {
-        Mono<UserResponse> userResponseMono = userComponent.getUser(id);
-        return success(userResponseMono);
+    @PostMapping(path = "/subscriptions")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<SubscriptionCreateResponse> createSubscription(@Valid @RequestBody CreateSubscriptionRequest request) {
+        SubscriptionCreateResponse response = subscriptionComponent.createSubscription(request);
+        return new Response<>(new Status(StatusConstants.HttpConstants.SUCCESS), response);
     }
 
-    @GetMapping(path = "/v1/users")
-    public Mono<Response<CustomPage<UserShortResponse>>> getUserList(@RequestParam(required = false, defaultValue = "1") Integer page,
-                                                                     @RequestParam(required = false, defaultValue = "10") Integer size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        Mono<CustomPage<UserShortResponse>> pageMono = userComponent.getUserList(pageRequest);
-        return success(pageMono);
+    @PostMapping(path = "/subscriptions/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Response<SubscriptionCreateResponse> cancelSubscription(
+            @PathVariable String id,
+            @RequestParam(name = "action", required = false)
+            @Required(exception = StatusConstants.HttpConstants.ACTION_IS_REQUIRED)
+            @IsEnum(enumClass = SubscriptionAction.class, exception = StatusConstants.HttpConstants.ACTION_IS_INVALID)
+                    String action) {
+        subscriptionComponent.cancelSubscription(id);
+        return new Response<>(new Status(StatusConstants.HttpConstants.SUCCESS), null);
     }
-
-    @DeleteMapping(path = "/v1/users/{id}")
-    public Mono<Response<Void>> deleteUser(@PathVariable Long id) {
-        userComponent.deleteUser(id);
-        return success();
-    }
-
-    @PostMapping(path = "/v1/users/{id}/generate-rsa")
-    public Mono<Response<String>> generateRSA(@PathVariable Long id) {
-        Mono<String> rsa = userComponent.generateRSA(id);
-        return success(rsa);
-    }*/
 
 }

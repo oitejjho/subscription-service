@@ -1,7 +1,5 @@
 package com.demo.subscriptionservice.config;
 
-import com.demo.subscriptionservice.constants.StatusConstants;
-import com.demo.subscriptionservice.controller.BaseController;
 import com.demo.subscriptionservice.exceptions.InvalidRequestException;
 import com.demo.subscriptionservice.model.Response;
 import com.demo.subscriptionservice.model.Status;
@@ -19,17 +17,25 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.WebUtils;
 
-import static com.demo.subscriptionservice.constants.StatusConstants.HttpConstants.INTERNAL_SERVER_ERROR;
+import java.util.NoSuchElementException;
+
+import static com.demo.subscriptionservice.constants.StatusConstants.HttpConstants.NOT_FOUND;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 @ResponseBody
-public class ControllerErrorHandlingConfig extends ResponseEntityExceptionHandler{
+public class ControllerErrorHandlingConfig extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response handleInvalidRequestException(InvalidRequestException ex) {
         return new Response<>(new Status(ex.getStatus()), null);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response handleNoSuchElementException(NoSuchElementException ex) {
+        return new Response<>(new Status(NOT_FOUND), null);
     }
 
     @Override
