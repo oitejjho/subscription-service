@@ -44,7 +44,7 @@ public class SubscriptionComponent {
         SubscriptionCompleteEvent event = new SubscriptionCompleteEvent();
         event.setEmail(entity.getEmail());
         event.setBody("Successfully subscribed");
-        rabbitEventSender.send(event);
+        rabbitEventSender.send(event.getEmail());
 
         return response;
     }

@@ -19,9 +19,6 @@ public class RabbitConfig {
     @Value("${spring.rabbitmq.exchange}")
     private String exchange;
 
-    @Value("${spring.rabbitmq.routingkey}")
-    private String routingKey;
-
     @Value("${spring.rabbitmq.username}")
     private String username;
 
@@ -49,7 +46,7 @@ public class RabbitConfig {
         return BindingBuilder
                 .bind(queue())
                 .to(myExchange())
-                .with(routingKey)
+                .with("")
                 .noargs();
     }
 
