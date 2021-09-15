@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @CrossOrigin
-@RequestMapping("/v1")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class SubscribedUserController implements BaseController {
 

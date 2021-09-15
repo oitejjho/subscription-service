@@ -21,4 +21,10 @@ public class SubscriptionServiceConfig {
     @NotEmpty
     private String correlationIdKey;
 
+    @NotEmpty
+    private String serviceRole;
+
+    @NotEmpty
+    private String serviceUsername;
+
 }

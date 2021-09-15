@@ -3,6 +3,7 @@ package com.demo.subscriptionservice.config;
 import com.demo.subscriptionservice.controller.BaseController;
 import com.demo.subscriptionservice.exceptions.InvalidRequestException;
 import com.demo.subscriptionservice.model.Response;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,8 +39,14 @@ public class ControllerErrorHandlingConfig implements BaseController {
     @ExceptionHandler(InvalidRequestException.class)
     public Response handleInvalidRequestException(InvalidRequestException ex, HttpServletResponse response) {
         String validationMessage = ex.getMessage();
-        return badRequest(HttpConstants.BAD_REQUEST, validationMessage, response);
+        return unauthorizedRequest(HttpConstants.BAD_CREDENTIALS, validationMessage, response);
     }
+
+    /*@ExceptionHandler(BadCredentialsException.class)
+    public Response handleBadCredentialsException(BadCredentialsException ex, HttpServletResponse response) {
+        String validationMessage = ex.getMessage();
+        return badRequest(HttpConstants.BAD_REQUEST, validationMessage, response);
+    }*/
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Response handleMissingServletRequestParameterException(MissingServletRequestParameterException ex, HttpServletResponse response) {

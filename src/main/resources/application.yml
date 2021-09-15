@@ -28,3 +28,5 @@ spring:
 subscription-service:
   api-key: "cb4532fc26b9421d88c5a079288bf51e"
   correlation-id-key: "X-Correlation-ID"
+  service-role: "ROLE_SERVICE"
+  service-username: "External Api"

@@ -18,7 +18,7 @@ public class StatusConstants {
         NEWSLETTER_ID_IS_REQUIRED("TEMP31304", "newsletter_id is required"),
 
         METHOD_NOT_ALLOWED("TEMP31994", "Method not allowed"),
-        JSON_DECODING_ERROR("TEMP31995", "JSON Decoding error"),
+        BAD_CREDENTIALS("TEMP31995", "Bad credentials"),
         NO_MATCHING_HANDLER("TEMP31996", "No matching handler"),
         NOT_FOUND("TEMP31997", "Not found"),
         BAD_REQUEST("TEMP31998", "Bad request"),

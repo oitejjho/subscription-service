@@ -40,6 +40,11 @@ public interface BaseController {
         return new Response<T>(new Status(httpConstants.getCode(), message), null);
     }
 
+    default <T> Response<T> unauthorizedRequest(HttpConstants httpConstants, String message, HttpServletResponse response) {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        return new Response<T>(new Status(httpConstants.getCode(), message), null);
+    }
+
     default <T> Response<T> serverError(HttpConstants httpConstants, HttpServletResponse response) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return new Response<T>(new Status(httpConstants), null);
