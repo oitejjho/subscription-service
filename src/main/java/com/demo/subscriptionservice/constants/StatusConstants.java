@@ -17,6 +17,7 @@ public class StatusConstants {
         CONSENT_FLAG_IS_REQUIRED("TEMP31304", "consent_flag is required"),
         NEWSLETTER_ID_IS_REQUIRED("TEMP31304", "newsletter_id is required"),
 
+        DUPLICATE_EMAIL_ERROR("TEMP31993", "email is duplicate"),
         METHOD_NOT_ALLOWED("TEMP31994", "Method not allowed"),
         JSON_DECODING_ERROR("TEMP31995", "JSON Decoding error"),
         NO_MATCHING_HANDLER("TEMP31996", "No matching handler"),

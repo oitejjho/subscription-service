@@ -1,55 +1,46 @@
 package com.demo.subscriptionservice.config;
 
+import com.demo.subscriptionservice.constants.StatusConstants;
 import com.demo.subscriptionservice.controller.BaseController;
 import com.demo.subscriptionservice.exceptions.InvalidRequestException;
 import com.demo.subscriptionservice.model.Response;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
+import com.demo.subscriptionservice.model.Status;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.util.WebUtils;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.Set;
+import static com.demo.subscriptionservice.constants.StatusConstants.HttpConstants.INTERNAL_SERVER_ERROR;
 
-import static com.demo.subscriptionservice.constants.StatusConstants.HttpConstants;
-
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
-public class ControllerErrorHandlingConfig implements BaseController {
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Response handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletResponse response) {
-        BindingResult result = ex.getBindingResult();
-        FieldError fieldError = result.getFieldError();
-        return badRequest(HttpConstants.BAD_REQUEST, fieldError.getDefaultMessage(), response);
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public Response handleConstraintViolationException(ConstraintViolationException ex, HttpServletResponse response) {
-        Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
-        ConstraintViolation<?> violation = violations.iterator().next();
-        return badRequest(HttpConstants.BAD_REQUEST, violation.getMessage(), response);
-    }
+@ResponseBody
+public class ControllerErrorHandlingConfig extends ResponseEntityExceptionHandler{
 
     @ExceptionHandler(InvalidRequestException.class)
-    public Response handleInvalidRequestException(InvalidRequestException ex, HttpServletResponse response) {
-        String validationMessage = ex.getMessage();
-        return badRequest(HttpConstants.BAD_REQUEST, validationMessage, response);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response handleInvalidRequestException(InvalidRequestException ex) {
+        return new Response<>(new Status(ex.getStatus()), null);
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public Response handleMissingServletRequestParameterException(MissingServletRequestParameterException ex, HttpServletResponse response) {
-        return badRequest(HttpConstants.BAD_REQUEST, ex.getMessage(), response);
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
+            request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
+        }
+        return new ResponseEntity<>(body, headers, status);
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public Response handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpServletResponse response) {
-        String errorMessage = ex.getName() + " should be type " + ex.getRequiredType().getName();
-        return badRequest(HttpConstants.BAD_REQUEST, errorMessage, response);
-    }
 
 }

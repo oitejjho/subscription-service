@@ -1,19 +1,33 @@
 package com.demo.subscriptionservice.service.persistence;
 
+import com.demo.subscriptionservice.constants.StatusConstants;
+import com.demo.subscriptionservice.exceptions.InvalidRequestException;
 import com.demo.subscriptionservice.model.entity.SubscribedUserEntity;
 import com.demo.subscriptionservice.repository.SubscribeUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import static com.demo.subscriptionservice.constants.StatusConstants.HttpConstants.DUPLICATE_EMAIL_ERROR;
 
 @Service
 @RequiredArgsConstructor
 public class SubscriptionPersistenceService {
 
+    private static final Logger LOG = LogManager.getLogger(SubscriptionPersistenceService.class);
+
     private final SubscribeUserRepository subscribeUserRepository;
 
     public SubscribedUserEntity createSubscription(SubscribedUserEntity entity) {
-        SubscribedUserEntity persistedEntity = this.subscribeUserRepository.save(entity);
-        return persistedEntity;
+        try {
+            SubscribedUserEntity persistedEntity = this.subscribeUserRepository.save(entity);
+            return persistedEntity;
+        } catch (DataIntegrityViolationException ex) {
+            LOG.error(ex.getMessage());
+            throw new InvalidRequestException(DUPLICATE_EMAIL_ERROR);
+        }
     }
 
     /*public Mono<UserCommand> save(UserCommand userCommand) {

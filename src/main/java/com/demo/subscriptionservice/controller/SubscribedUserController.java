@@ -2,10 +2,13 @@ package com.demo.subscriptionservice.controller;
 
 
 import com.demo.subscriptionservice.component.SubscriptionComponent;
+import com.demo.subscriptionservice.constants.StatusConstants;
 import com.demo.subscriptionservice.model.Response;
+import com.demo.subscriptionservice.model.Status;
 import com.demo.subscriptionservice.model.request.CreateSubscriptionRequest;
 import com.demo.subscriptionservice.model.response.SubscriptionResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +20,16 @@ import javax.validation.Valid;
 @CrossOrigin
 @RequestMapping("/v1")
 @RequiredArgsConstructor
-public class SubscribedUserController implements BaseController {
+@ResponseBody
+public class SubscribedUserController {
 
     private final SubscriptionComponent subscriptionComponent;
 
     @PostMapping(path = "/subscriptions")
+    @ResponseStatus(HttpStatus.CREATED)
     public Response<SubscriptionResponse> createSubscription(@Valid @RequestBody CreateSubscriptionRequest request, HttpServletResponse httpServletResponse) {
         SubscriptionResponse response = subscriptionComponent.createSubscription(request);
-        return created(response,httpServletResponse);
+        return new Response<>(new Status(StatusConstants.HttpConstants.SUCCESS), response);
     }
 
     /*@PatchMapping(path = "/v1/users/{id}")
