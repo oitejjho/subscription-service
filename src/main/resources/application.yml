@@ -15,6 +15,15 @@ spring:
       idle-timeout: 10000
       minimum-idle: 1
       maximum-pool-size: 10
+  rabbitmq:
+    host: localhost
+    virtualHost: tmn-th-alpha
+    port: 15672
+    password: guest
+    username: guest
+    exchange: subs.exchange
+    queue: subs.queue
+    routingkey: subs.routingkey
 #  jpa:
 #    hibernate:
 #      ddl-auto: create-drop

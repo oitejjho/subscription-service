@@ -1,10 +1,12 @@
 package com.demo.subscriptionservice.component;
 
 import com.demo.subscriptionservice.model.entity.SubscribedUserEntity;
+import com.demo.subscriptionservice.model.event.SubscriptionCompleteEvent;
 import com.demo.subscriptionservice.model.request.CreateSubscriptionRequest;
 import com.demo.subscriptionservice.model.response.SubscriptionCreateResponse;
 import com.demo.subscriptionservice.model.response.SubscriptionListResponse;
 import com.demo.subscriptionservice.model.response.SubscriptionResponse;
+import com.demo.subscriptionservice.service.eventbus.RabbitEventSender;
 import com.demo.subscriptionservice.service.persistence.SubscriptionPersistenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -26,6 +28,7 @@ public class SubscriptionComponent {
 
     private final SubscriptionPersistenceService subscriptionPersistenceService;
     private final ConversionService conversionService;
+    private final RabbitEventSender rabbitEventSender;
 
     public SubscriptionCreateResponse createSubscription(CreateSubscriptionRequest request) {
         SubscribedUserEntity entity = this.conversionService.convert(request, SubscribedUserEntity.class);
@@ -37,6 +40,11 @@ public class SubscriptionComponent {
 
         SubscriptionCreateResponse response = new SubscriptionCreateResponse();
         response.setSubscriptionId(persistedEntity.getSubscriptionId());
+
+        SubscriptionCompleteEvent event = new SubscriptionCompleteEvent();
+        event.setEmail(entity.getEmail());
+        event.setBody("Successfully subscribed");
+        rabbitEventSender.send(event);
 
         return response;
     }
