@@ -1,6 +1,5 @@
 package com.demo.subscriptionservice.controller;
 
-
 import com.demo.subscriptionservice.annotations.IsEnum;
 import com.demo.subscriptionservice.annotations.Required;
 import com.demo.subscriptionservice.component.SubscriptionComponent;
@@ -13,6 +12,8 @@ import com.demo.subscriptionservice.model.response.SubscriptionCreateResponse;
 import com.demo.subscriptionservice.model.response.SubscriptionListResponse;
 import com.demo.subscriptionservice.model.response.SubscriptionResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +30,6 @@ import javax.validation.Valid;
 public class SubscribedUserController {
 
     private final SubscriptionComponent subscriptionComponent;
-
 
     @GetMapping(path = "/subscriptions")
     @ResponseStatus(HttpStatus.OK)
@@ -52,7 +52,7 @@ public class SubscribedUserController {
         return new Response<>(new Status(StatusConstants.HttpConstants.SUCCESS), response);
     }
 
-    @PostMapping(path = "/subscriptions/{id}")
+    @PutMapping(path = "/subscriptions/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Response<SubscriptionCreateResponse> cancelSubscription(
             @PathVariable String id,

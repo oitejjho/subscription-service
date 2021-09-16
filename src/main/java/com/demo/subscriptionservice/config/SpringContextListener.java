@@ -1,6 +1,7 @@
 package com.demo.subscriptionservice.config;
 
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Component
 public class SpringContextListener implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final Logger LOG = LoggerFactory.getLogger(SpringContextListener.class);
+    private static final Logger LOG = LogManager.getLogger(SpringContextListener.class);
 
     @Autowired
     private Set<Converter<?, ?>> converters;

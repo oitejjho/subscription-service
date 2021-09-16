@@ -16,9 +16,15 @@ import javax.validation.constraints.NotEmpty;
 public class SubscriptionServiceConfig {
 
     @NotEmpty
-    private String apiKey;
+    private String apiKeyHeader;
+
+    @NotEmpty
+    private String apiKeyValue;
 
     @NotEmpty
     private String correlationIdKey;
+
+    @NotEmpty
+    private String role;
 
 }

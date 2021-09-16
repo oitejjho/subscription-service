@@ -1,8 +1,11 @@
 package com.demo.subscriptionservice.config;
 
+import com.demo.subscriptionservice.exceptions.DuplicateRequestException;
 import com.demo.subscriptionservice.exceptions.InvalidRequestException;
 import com.demo.subscriptionservice.model.Response;
 import com.demo.subscriptionservice.model.Status;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -26,15 +29,26 @@ import static com.demo.subscriptionservice.constants.StatusConstants.HttpConstan
 @ResponseBody
 public class ControllerErrorHandlingConfig extends ResponseEntityExceptionHandler {
 
+    private static final Logger LOG = LogManager.getLogger(ControllerErrorHandlingConfig.class);
+
+    @ExceptionHandler(DuplicateRequestException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Response handleDuplicateRequestException(DuplicateRequestException ex) {
+        LOG.info("error happened status error {}", ex.getMessage());
+        return new Response<>(new Status(ex.getStatus()), null);
+    }
+
     @ExceptionHandler(InvalidRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response handleInvalidRequestException(InvalidRequestException ex) {
+        LOG.info("error happened status error {}", ex.getMessage());
         return new Response<>(new Status(ex.getStatus()), null);
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Response handleNoSuchElementException(NoSuchElementException ex) {
+        LOG.info("error happened status error {}", ex.getMessage());
         return new Response<>(new Status(NOT_FOUND), null);
     }
 
@@ -43,6 +57,7 @@ public class ControllerErrorHandlingConfig extends ResponseEntityExceptionHandle
             Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
+            LOG.info("error happened status error {} {}", ex.getMessage(), ex);
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
         }
         return new ResponseEntity<>(body, headers, status);

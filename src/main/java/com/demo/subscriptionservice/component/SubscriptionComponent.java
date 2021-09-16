@@ -1,7 +1,6 @@
 package com.demo.subscriptionservice.component;
 
 import com.demo.subscriptionservice.model.entity.SubscribedUserEntity;
-import com.demo.subscriptionservice.model.event.SubscriptionCompleteEvent;
 import com.demo.subscriptionservice.model.request.CreateSubscriptionRequest;
 import com.demo.subscriptionservice.model.response.SubscriptionCreateResponse;
 import com.demo.subscriptionservice.model.response.SubscriptionListResponse;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,10 +38,7 @@ public class SubscriptionComponent {
         SubscriptionCreateResponse response = new SubscriptionCreateResponse();
         response.setSubscriptionId(persistedEntity.getSubscriptionId());
 
-        SubscriptionCompleteEvent event = new SubscriptionCompleteEvent();
-        event.setEmail(entity.getEmail());
-        event.setBody("Successfully subscribed");
-        rabbitEventSender.send(event.getEmail());
+        rabbitEventSender.send(persistedEntity.getEmail());
 
         return response;
     }

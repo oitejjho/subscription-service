@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.Email;
-
 import static com.demo.subscriptionservice.constants.StatusConstants.HttpConstants;
 
 @Getter
@@ -33,8 +31,8 @@ public class CreateSubscriptionRequest {
     @IsEnum(enumClass = Gender.class, exception = HttpConstants.GENDER_IS_INVALID)
     private String gender;
 
-    @Required(exception = HttpConstants.DATE_OF_BIRTH_IS_REQUIRED)
     @IsDate(format = DateTimeUtils.DATE_FORMAT_YYYY_MM_DD, exception = HttpConstants.DATE_OF_BIRTH_IS_INVALID)
+    @Required(exception = HttpConstants.DATE_OF_BIRTH_IS_REQUIRED)
     private String dateOfBirth;
 
     @Required(exception = HttpConstants.CONSENT_FLAG_IS_REQUIRED)

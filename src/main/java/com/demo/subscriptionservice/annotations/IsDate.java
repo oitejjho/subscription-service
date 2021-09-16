@@ -23,6 +23,6 @@ public @interface IsDate {
 
     HttpConstants exception() default HttpConstants.BAD_REQUEST;
 
-    String format() default DateTimeUtils.DATETIME_FORMAT_YYYY_MM_DD_T_HH_MM_SS;
+    String format() default DateTimeUtils.DATE_FORMAT_YYYY_MM_DD;
 
 }

@@ -34,5 +34,7 @@ spring:
 #          new_generator_mappings: false
 
 subscription-service:
-  x-api-key: "cb4532fc26b9421d88c5a079288bf51e"
+  api-key-header: "x-api-key"
+  api-key-value: "cb4532fc26b9421d88c5a079288bf51e"
   correlation-id-key: "X-Correlation-ID"
+  role: "ROLE_SERVICE"
