@@ -75,7 +75,7 @@ Configure the port by changing `server.port` in __application.yml__
 * Containerization
 * Integration with CICD i.e. jenkins / rancher
 * Metrics Expose
-* Integration with jaeger / slueth / opentelemetry for better visibility
+* Integration with jaeger / slueth / opentelemetry for better traceability
 * Integration with metrics collector i.e. prometheus
 * Integration with ELK stack
 * Integration with grafana for better visibility, observability and alerts
