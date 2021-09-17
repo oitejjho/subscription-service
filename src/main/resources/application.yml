@@ -15,29 +15,12 @@ spring:
       idle-timeout: 10000
       minimum-idle: 1
       maximum-pool-size: 10
-#  rabbitmq:
-#    host: localhost
-#    virtualHost: tmn-th-alpha
-#    port: 15672
-#    password: guest
-#    username: guest
-#    exchange: numbers
-#    queue: numbers
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.H2Dialect
-#        format_sql: true
-#        id:
-#          new_generator_mappings: false
 
 rabbit:
   default-endpoint-name: standalone
   endpoints:
     standalone:
-      host: localhost
+      host: host.docker.internal
       username: guest
       password: guest
       exchange: emails
