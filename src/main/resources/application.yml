@@ -5,8 +5,13 @@ spring:
   application:
     name: basic
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/subscription?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3307/subscription?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password: root
+#    initialization-mode: always
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:subscription_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: root
     password: root
     initialization-mode: always
@@ -15,12 +20,21 @@ spring:
       idle-timeout: 10000
       minimum-idle: 1
       maximum-pool-size: 10
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.H2Dialect
+#        format_sql: true
+#        id:
+#          new_generator_mappings: false
 
 rabbit:
   default-endpoint-name: standalone
   endpoints:
     standalone:
-      host: host.docker.internal
+      host: localhost
       username: guest
       password: guest
       exchange: emails
