@@ -6,7 +6,7 @@ spring:
     name: basic
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/subscription?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://localhost:3307/subscription?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     initialization-mode: always
@@ -15,14 +15,14 @@ spring:
       idle-timeout: 10000
       minimum-idle: 1
       maximum-pool-size: 10
-  rabbitmq:
-    host: localhost
-    virtualHost: tmn-th-alpha
-    port: 15672
-    password: guest
-    username: guest
-    exchange: numbers
-    queue: numbers
+#  rabbitmq:
+#    host: localhost
+#    virtualHost: tmn-th-alpha
+#    port: 15672
+#    password: guest
+#    username: guest
+#    exchange: numbers
+#    queue: numbers
 #  jpa:
 #    hibernate:
 #      ddl-auto: create-drop
@@ -32,6 +32,16 @@ spring:
 #        format_sql: true
 #        id:
 #          new_generator_mappings: false
+
+rabbit:
+  default-endpoint-name: standalone
+  endpoints:
+    standalone:
+      host: localhost
+      username: guest
+      password: guest
+      exchange: emails
+      queue: emails
 
 subscription-service:
   api-key-header: "x-api-key"
