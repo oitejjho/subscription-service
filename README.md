@@ -20,6 +20,7 @@
 ## Introduction
 
 This service is responsible for saving subscription data in persistence datastore, publish subscription event to rabbitmq to notify email service.
+* [Architecture](https://drive.google.com/file/d/1XGGeUXccthocw9K2tq2LzusGMpywMcKN/view?usp=sharing)
 
 ## Features
 * Microservice architecture
